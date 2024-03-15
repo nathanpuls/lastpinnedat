@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <title>Redirecting</title>
+    <link rel="icon" type="image/x-icon" href="">
+    <style>
+        /* CSS styles */
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <script>
+        // JavaScript code
+        const collectionId = 42287170; // Replace with your actual collection ID
+        const apiEndpoint = `https://api.raindrop.io/rest/v1/raindrops/${collectionId}`;
+        const authToken = "Bearer 0f1d16de-033f-4d92-9a50-e37992ed9b94";
+
+        const requestOptions = {
+            method: 'GET',
+            headers: new Headers({
+                "Authorization": authToken,
+            }),
+            redirect: 'follow'
+        };
+
+        fetch(apiEndpoint, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                // Sort items by date (assuming items have a 'created' timestamp)
+                data.items.sort((a, b) => new Date(b.created) - new Date(a.created));
+
+                // Get the most recent item
+                const mostRecentItem = data.items[0]; // Assuming the first item is the most recent one
+
+                // Redirect to the most recent URL
+          //console.log(mostRecentItem.link);
+                window.location.href = mostRecentItem.link;
+            })
+            .catch(error => {
+                console.error("Error fetching apiEndpoint:", error);
+            });
+    </script>
+</body>
+</html>
